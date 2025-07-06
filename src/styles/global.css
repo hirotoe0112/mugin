@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+body {
+  font-family: "Sawarabi Gothic", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  scrollbar-gutter: stable;
+}
+
+p {
+  margin-top: 1.3em;
+  margin-bottom: 1.3em;
+}
