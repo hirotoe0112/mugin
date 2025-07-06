@@ -1,0 +1,54 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Border from "../components/Border.astro";
+import Card from "../components/Card.astro";
+
+const allPosts = await getCollection("blog");
+const sortedPosts = allPosts.sort(
+  (a, b) =>
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
+);
+
+const recommendedPosts = sortedPosts
+  .filter((post) => post.data.recommended)
+  .slice(0, 3);
+const latestPosts = sortedPosts.slice(0, 3);
+---
+
+<Layout>
+	<Border />
+
+	<!-- おすすめ -->
+	<div class="recommend mb-12">
+		<div class="container mx-auto">
+			<h2 class="text-center text-2xl font-bold p-4">おすすめ記事</h2>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			{recommendedPosts.map((post) => (
+				<Card post={post} />
+			))}
+		</div>
+	</div>
+
+	<Border />
+
+	<!-- 新着 -->
+	<div class="latest mb-8">
+		<div class="container mx-auto">
+			<h2 class="text-center text-2xl font-bold p-4">新着記事</h2>
+		</div>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			{latestPosts.map((post) => (
+				<Card post={post} />
+			))}
+		</div>
+		<div class="text-center mt-8">
+			<a href="/blog/" class="inline-flex items-center px-6 py-3 bg-gray-300 rounded-md">
+				もっと読む
+			</a>
+		</div>
+	</div>
+
+	<Border />
+</Layout>

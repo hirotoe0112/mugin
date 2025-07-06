@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  mugin:
+    container_name: mugin
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - .:/usr/src
+    tty: true
+    ports:
+      - 4321:4321

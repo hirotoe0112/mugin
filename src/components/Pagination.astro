@@ -1,0 +1,62 @@
+---
+export interface Props {
+  page: {
+    data: any[];
+    url: {
+      current: string;
+      next?: string;
+      prev?: string;
+    };
+    currentPage: number;
+    lastPage: number;
+    size: number;
+    total: number;
+  };
+}
+
+const { page } = Astro.props;
+---
+
+<nav class="flex justify-center items-center space-x-4 mt-12">
+  <!-- 前へ -->
+  {
+    page.url.prev ? (
+      <a href={page.url.prev} class="px-4 py-2 bg-gray-300 rounded-md">
+        ←
+      </a>
+    ) : (
+      <span class="px-4 py-2 bg-gray-200 rounded-md">←</span>
+    )
+  }
+
+  <!-- ページ番号 -->
+  <div class="flex items-center space-x-2">
+    {
+      Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => {
+        const isCurrentPage = pageNum === page.currentPage
+        const pageUrl = pageNum === 1 ? "/blog/" : `/blog/${pageNum}/`
+
+        return isCurrentPage ? (
+          <span class="px-3 py-2 bg-gray-200 rounded-md">
+            {pageNum}
+          </span>
+        ) : (
+          <a href={pageUrl} class="px-3 py-2 bg-gray-300 rounded-md">
+            {pageNum}
+          </a>
+        )
+      })
+    }
+  </div>
+
+  <!-- 次へ -->
+  {
+    page.url.next ? (
+      <a href={page.url.next} class="px-4 py-2 bg-gray-300 rounded-md">
+        →
+      </a>
+    ) : (
+      <span class="px-4 py-2 bg-gray-200 rounded-md">→</span>
+    )
+  }
+</nav>

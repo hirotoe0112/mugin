@@ -1,0 +1,3 @@
+FROM node:24
+WORKDIR /usr/src
+EXPOSE 4321

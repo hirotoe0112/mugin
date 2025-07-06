@@ -1,0 +1,35 @@
+---
+import { type CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import { dateToIsoString } from "../helpers/date-util";
+import { config } from "../config";
+
+export interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/**/*.{jpeg,jpg,png,gif}",
+);
+let imagePath = `${config.blogImageRoot}/${post.data.imagePath}`;
+if (!images[imagePath]) {
+  imagePath = `${config.blogImageRoot}/default.jpg`;
+}
+
+const { title, pubDate } = post.data;
+const formattedDate = dateToIsoString(pubDate);
+---
+
+<a href={`/blog/${post.slug}`}>
+  <article class="shadow-lg flex flex-col items-start">
+    <Image src={images[imagePath]()} alt="" class="w-full h-auto" />
+    <div class="px-6 py-4 mb-4">
+      <h3 class="text-xl font-bold line-clamp-2">{title}</h3>
+      <div class="text-base text-gray-600 line-clamp-2 mb-2">{post.data.description}</div>
+      <div class="text-base">{formattedDate}</div>
+    </div>
+  </article>
+</a>

@@ -1,0 +1,53 @@
+---
+import type { GetStaticPaths, ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import Border from "../../components/Border.astro";
+import { getCollection, render } from "astro:content";
+import { dateToIsoString } from "../../helpers/date-util";
+import { config } from "../../config";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/images/**/*.{jpeg,jpg,png,gif}",
+);
+let imagePath = `${config.blogImageRoot}/${post.data.imagePath}`;
+if (!images[imagePath]) {
+  imagePath = `${config.blogImageRoot}/default.jpg`;
+}
+---
+
+<Layout>
+	<Border />
+
+  <!-- ヘッダー部 -->
+  <div class="mb-4">
+    <div class="text-3xl md:text-4xl lg:text-3xl font-bold">
+      {post.data.title}
+    </div>
+    <div class="mb-2">{dateToIsoString(post.data.pubDate)}</div>
+    <div class="text-gray-700">{post.data.description}</div>
+  </div>
+
+  <!-- アイキャッチ画像 -->
+  <div class="mb-8">
+    <Image src={images[imagePath]()} alt="" class="w-full h-auto" />
+  </div>
+
+  <!-- 本文 -->
+  <div class="mb-12">
+    <Content />
+  </div>
+
+	<Border />
+</Layout>
