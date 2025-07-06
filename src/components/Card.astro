@@ -3,7 +3,7 @@ import { type CollectionEntry } from "astro:content";
 import type { ImageMetadata } from "astro";
 import { Image } from "astro:assets";
 import { dateToIsoString } from "../helpers/date-util";
-import { config } from "../config";
+import { settings } from "../settings";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -14,9 +14,9 @@ const { post } = Astro.props;
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/images/**/*.{jpeg,jpg,png,gif}",
 );
-let imagePath = `${config.blogImageRoot}/${post.data.imagePath}`;
+let imagePath = `${settings.blogImageRoot}/${post.data.imagePath}`;
 if (!images[imagePath]) {
-  imagePath = `${config.blogImageRoot}/default.jpg`;
+  imagePath = `${settings.blogImageRoot}/default.jpg`;
 }
 
 const { title, pubDate } = post.data;

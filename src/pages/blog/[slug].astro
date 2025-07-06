@@ -5,7 +5,7 @@ import Layout from "../../layouts/Layout.astro";
 import Border from "../../components/Border.astro";
 import { getCollection, render } from "astro:content";
 import { dateToIsoString } from "../../helpers/date-util";
-import { config } from "../../config";
+import { settings } from "../../settings";
 
 export const getStaticPaths = (async () => {
   const posts = await getCollection("blog");
@@ -21,9 +21,9 @@ const { Content } = await render(post);
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/images/**/*.{jpeg,jpg,png,gif}",
 );
-let imagePath = `${config.blogImageRoot}/${post.data.imagePath}`;
+let imagePath = `${settings.blogImageRoot}/${post.data.imagePath}`;
 if (!images[imagePath]) {
-  imagePath = `${config.blogImageRoot}/default.jpg`;
+  imagePath = `${settings.blogImageRoot}/default.jpg`;
 }
 ---
 
