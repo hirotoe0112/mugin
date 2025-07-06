@@ -1,3 +1,3 @@
 export const settings = {
-  blogImageRoot: "/src/assets/images/blog"
-}
+  blogImageRoot: "/src/assets/images/blog",
+};
