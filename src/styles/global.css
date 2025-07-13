@@ -11,3 +11,8 @@ p {
   margin-top: 1.3em;
   margin-bottom: 1.3em;
 }
+
+.blog-content li {
+  list-style: circle;
+  list-style-position: inside;
+}
